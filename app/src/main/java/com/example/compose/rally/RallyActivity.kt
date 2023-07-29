@@ -56,7 +56,9 @@ fun RallyApp() {
             topBar = {
                 RallyTabRow(
                     allScreens = rallyTabRowScreens,
-                    onTabSelected = { screen -> currentScreen = screen },
+                    onTabSelected = { newScreen ->
+                        navController.navigate(newScreen.route)
+                    },
                     currentScreen = currentScreen
                 )
             }
