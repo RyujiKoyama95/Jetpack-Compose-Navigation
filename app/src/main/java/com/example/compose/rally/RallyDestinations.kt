@@ -46,6 +46,7 @@ object Overview : RallyDestination {
     override val screen: @Composable () -> Unit = { OverviewScreen() }
 }
 
+// routeはdestination毎に一意の値とする
 object Accounts : RallyDestination {
     override val icon = Icons.Filled.AttachMoney
     override val route = "accounts"

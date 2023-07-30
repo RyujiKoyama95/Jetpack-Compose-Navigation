@@ -47,6 +47,8 @@ class RallyActivity : ComponentActivity() {
     }
 }
 
+// NavControllerは常に階層最上位のRoot Composableに配置する。
+// これによりNavControllerを参照する必要のあるすべての下階層のComposableがアクセスできるようになる
 @Composable
 fun RallyApp() {
     RallyTheme {
@@ -63,10 +65,14 @@ fun RallyApp() {
                 )
             }
         ) { innerPadding ->
+            // NavHost はコンテナとして機能し、ナビゲーショングラフの現在のデスティネーションを表示する
+            // NavController は常に 1 つの NavHost コンポーザブルに関連付けられる
+            // コンポーザブル間を移動すると、NavHostのコンテンツは自動的に再コンポーズされる
             NavHost(
                 navController = navController,
                 startDestination = Overview.route,
                 modifier = Modifier.padding(innerPadding),
+                // ナビゲーション グラフを定義してビルドするためのもの
                 builder = {
                     composable(
                         route = Overview.route,
@@ -88,9 +94,6 @@ fun RallyApp() {
                     )
                 }
             )
-            Box(Modifier.padding(innerPadding)) {
-                currentScreen.screen()
-            }
         }
     }
 }
