@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -58,6 +59,8 @@ fun RallyApp() {
             topBar = {
                 RallyTabRow(
                     allScreens = rallyTabRowScreens,
+                    // コードを再利用が可能なものにするため、navController全体をコンポーザブルに渡すことはせず、
+                    // トリガーするナビゲーションアクションを定義するコールバックを常に指定する
                     onTabSelected = { newScreen ->
                         navController.navigateSingleTopTo(newScreen.route)
                     },
@@ -99,7 +102,13 @@ fun RallyApp() {
 }
 
 fun NavHostController.navigateSingleTopTo(route: String) =
-    // Todo: thisの意味がよくわからん
+    // Todo: この辺のバックスタックについて確認必要、また、thisの意味がよくわからん
     this.navigate(route) {
+        popUpTo(
+            this@navigateSingleTopTo.graph.findStartDestination().id
+        ) {
+            saveState = true
+        }
         launchSingleTop = true
+        restoreState = true
     }
