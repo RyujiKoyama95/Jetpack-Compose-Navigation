@@ -17,6 +17,7 @@
 package com.example.compose.rally
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -33,7 +34,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.compose.rally.ui.accounts.AccountsScreen
+import com.example.compose.rally.ui.bills.BillsScreen
 import com.example.compose.rally.ui.components.RallyTabRow
+import com.example.compose.rally.ui.overview.OverviewScreen
 import com.example.compose.rally.ui.theme.RallyTheme
 
 /**
@@ -56,7 +60,9 @@ fun RallyApp() {
     RallyTheme {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
+        Log.d("RallyApp", "currentBackStack=$currentBackStack")
         val currentDestination = currentBackStack?.destination
+        Log.d("RallyApp", "currentDestination=$currentDestination")
         val currentScreen = rallyTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
         Scaffold(
             topBar = {
@@ -83,19 +89,19 @@ fun RallyApp() {
                     composable(
                         route = Overview.route,
                         content = {
-                            Overview.screen()
+                            OverviewScreen()
                         }
                     )
                     composable(
                         route = Accounts.route,
                         content = {
-                            Accounts.screen()
+                            AccountsScreen()
                         }
                     )
                     composable(
                         route = Bills.route,
                         content = {
-                            Bills.screen()
+                            BillsScreen()
                         }
                     )
                 }
