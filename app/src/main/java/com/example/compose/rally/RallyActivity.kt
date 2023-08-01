@@ -89,7 +89,10 @@ fun RallyApp() {
                     composable(
                         route = Overview.route,
                         content = {
-                            OverviewScreen()
+                            OverviewScreen(
+                                onClickSeeAllAccounts = { navController.navigateSingleTopTo(Accounts.route) },
+                                onClickSeeAllBills = { navController.navigateSingleTopTo(Bills.route) }
+                            )
                         }
                     )
                     composable(
