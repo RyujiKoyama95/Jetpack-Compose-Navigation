@@ -110,8 +110,18 @@ fun RallyApp() {
     }
 }
 
+/**
+ * this@navigateSingleTopTo.graph.findStartDestination().id は、ナビゲーショングラフ内のスタート（最初の）目的地（画面）のIDを取得しています。
+ * navigateSingleTopToメソッドが実行されるときには、このIDが指定されたルート（目的地）に対応します。
+ * popUpToメソッドの第一引数には、バックスタックから削除したい画面のIDを指定します。上記のコードでは、
+ * 最初の目的地までバックスタックをクリア（削除）するために、スタート目的地のIDが指定されています。
+ * popUpToメソッドのブロック内では、saveStateプロパティがtrueに設定されています。
+ * これは、削除する画面の状態を保存するかどうかを指定するもので、trueに設定されている場合、その画面の状態が保存されます。
+ * これにより、画面が再作成されるときに以前の状態を復元することができます。
+ * 要するに、このコードは「特定の目的地までバックスタックをクリアして移動する」というナビゲーションの振る舞いを制御しています。
+ */
 fun NavHostController.navigateSingleTopTo(route: String) =
-    // Todo: この辺のバックスタックについて確認必要、また、thisの意味がよくわからん
+    // thisはインスタンスを指すのでこの場合はNavHostController
     this.navigate(route) {
         popUpTo(
             this@navigateSingleTopTo.graph.findStartDestination().id
