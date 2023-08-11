@@ -27,11 +27,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.compose.rally.ui.accounts.AccountsScreen
+import com.example.compose.rally.ui.accounts.SingleAccountScreen
 import com.example.compose.rally.ui.bills.BillsScreen
 import com.example.compose.rally.ui.components.RallyTabRow
 import com.example.compose.rally.ui.overview.OverviewScreen
@@ -102,6 +105,19 @@ fun RallyApp() {
                         route = Bills.route,
                         content = {
                             BillsScreen()
+                        }
+                    )
+                    composable(
+                        route = "${SingleAccount.route}/{${SingleAccount.accountTypeArg}}",
+                        arguments = listOf(
+                            navArgument(
+                                name = SingleAccount.accountTypeArg,
+                                // 型を明示的に指定しない場合はデフォルト値から推測されるので、なくてもいい
+                                builder = { type = NavType.StringType }
+                            )
+                        ),
+                        content = {
+                            SingleAccountScreen()
                         }
                     )
                 }
