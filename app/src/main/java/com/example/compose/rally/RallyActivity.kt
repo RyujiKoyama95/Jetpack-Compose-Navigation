@@ -108,16 +108,14 @@ fun RallyApp() {
                         }
                     )
                     composable(
-                        route = "${SingleAccount.route}/{${SingleAccount.accountTypeArg}}",
-                        arguments = listOf(
-                            navArgument(
-                                name = SingleAccount.accountTypeArg,
-                                // 型を明示的に指定しない場合はデフォルト値から推測されるので、なくてもいい
-                                builder = { type = NavType.StringType }
+                        route = SingleAccount.routeWithArgs,
+                        arguments = SingleAccount.arguments,
+                        content = { navBackStackEntry ->
+                            val accountType =
+                                navBackStackEntry.arguments?.getString(SingleAccount.accountTypeArg)
+                            SingleAccountScreen(
+                                accountType = accountType
                             )
-                        ),
-                        content = {
-                            SingleAccountScreen()
                         }
                     )
                 }
