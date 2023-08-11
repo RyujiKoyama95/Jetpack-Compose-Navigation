@@ -27,12 +27,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.compose.rally.ui.accounts.AccountsScreen
 import com.example.compose.rally.ui.accounts.SingleAccountScreen
 import com.example.compose.rally.ui.bills.BillsScreen
@@ -91,14 +89,21 @@ fun RallyApp() {
                         content = {
                             OverviewScreen(
                                 onClickSeeAllAccounts = { navController.navigateSingleTopTo(Accounts.route) },
-                                onClickSeeAllBills = { navController.navigateSingleTopTo(Bills.route) }
+                                onClickSeeAllBills = { navController.navigateSingleTopTo(Bills.route) },
+                                onAccountClick = { accountType ->
+                                    navController.navigateSingleAccount(accountType)
+                                }
                             )
                         }
                     )
                     composable(
                         route = Accounts.route,
                         content = {
-                            AccountsScreen()
+                            AccountsScreen(
+                                onAccountClick = { accountType ->
+                                    navController.navigateSingleAccount(accountType)
+                                }
+                            )
                         }
                     )
                     composable(
@@ -113,6 +118,7 @@ fun RallyApp() {
                         content = { navBackStackEntry ->
                             val accountType =
                                 navBackStackEntry.arguments?.getString(SingleAccount.accountTypeArg)
+                            Log.d("RallyApp", "accountType=$accountType")
                             SingleAccountScreen(
                                 accountType = accountType
                             )
@@ -134,7 +140,7 @@ fun RallyApp() {
  * これにより、画面が再作成されるときに以前の状態を復元することができます。
  * 要するに、このコードは「特定の目的地までバックスタックをクリアして移動する」というナビゲーションの振る舞いを制御しています。
  */
-fun NavHostController.navigateSingleTopTo(route: String) =
+private fun NavHostController.navigateSingleTopTo(route: String) =
     // thisはインスタンスを指すのでこの場合はNavHostController
     this.navigate(route) {
         popUpTo(
@@ -145,3 +151,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         launchSingleTop = true
         restoreState = true
     }
+
+private fun NavHostController.navigateSingleAccount(accountType: String) {
+    this.navigateSingleTopTo("${SingleAccount.route}/$accountType")
+}
